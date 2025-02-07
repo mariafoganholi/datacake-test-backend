@@ -9,46 +9,39 @@ from todo.serializers import TodoItemSerializer
 from rest_framework.decorators import api_view
 
 
-@api_view(['GET', 'POST', 'DELETE'])
-def tutorial_list(request):
+@api_view(['GET', 'POST'])
+def todo_list(request):
     if request.method == 'GET':
         todo_items = TodoItem.objects.all()
         todoitem_serializer = TodoItemSerializer(todo_items, many=True)
         return JsonResponse(todoitem_serializer.data, safe=False)
         # 'safe=False' for objects serialization
- 
-    elif request.method == 'POST':
-        tutorial_data = JSONParser().parse(request)
-        tutorial_serializer = TodoItemSerializer(data=tutorial_data)
-        if tutorial_serializer.is_valid():
-            tutorial_serializer.save()
-            return JsonResponse(tutorial_serializer.data, status=status.HTTP_201_CREATED) 
-        return JsonResponse(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    elif request.method == 'DELETE':
-        count = TodoItem.objects.all().delete()
-        return JsonResponse({'message': '{} Tutorials were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)
+    if request.method == 'POST':
+        todoitem_data = JSONParser().parse(request)
+        todoitem_serializer = TodoItemSerializer(data=todoitem_data)
+        print(todoitem_serializer.is_valid())
+        if not todoitem_serializer.is_valid():
+            return JsonResponse(todoitem_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        todoitem_serializer.save()
+        return JsonResponse(todoitem_serializer.data, status=status.HTTP_201_CREATED) 
  
  
-@api_view(['GET', 'PUT', 'DELETE'])
-def tutorial_detail(request, pk):
-    try: 
-        tutorial = TodoItem.objects.get(pk=pk) 
-    except TodoItem.DoesNotExist: 
-        return JsonResponse({'message': 'The tutorial does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+@api_view(['PUT', 'DELETE'])
+def todo_item(request, pk):
+    print("tutorial detail")
+    # try: 
+    #     tutorial = TodoItem.objects.get(pk=pk) 
+    # except TodoItem.DoesNotExist: 
+    #     return JsonResponse({'message': 'The tutorial does not exist'}, status=status.HTTP_404_NOT_FOUND) 
  
-    if request.method == 'GET': 
-        tutorial_serializer = TodoItemSerializer(tutorial) 
-        return JsonResponse(tutorial_serializer.data) 
+    # if request.method == 'PUT': 
+    #     tutorial_data = JSONParser().parse(request) 
+    #     tutorial_serializer = TodoItemSerializer(tutorial, data=tutorial_data) 
+    #     if tutorial_serializer.is_valid(): 
+    #         tutorial_serializer.save() 
+    #         return JsonResponse(tutorial_serializer.data) 
+    #     return JsonResponse(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
  
-    elif request.method == 'PUT': 
-        tutorial_data = JSONParser().parse(request) 
-        tutorial_serializer = TodoItemSerializer(tutorial, data=tutorial_data) 
-        if tutorial_serializer.is_valid(): 
-            tutorial_serializer.save() 
-            return JsonResponse(tutorial_serializer.data) 
-        return JsonResponse(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
- 
-    elif request.method == 'DELETE': 
-        tutorial.delete() 
-        return JsonResponse({'message': 'Tutorial was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+    # elif request.method == 'DELETE': 
+    #     tutorial.delete() 
+    #     return JsonResponse({'message': 'Tutorial was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
