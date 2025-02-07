@@ -1,12 +1,13 @@
 from rest_framework import serializers 
-from todo.models import Tutorial
+from todo.models import TodoItem
  
  
-class TutorialSerializer(serializers.ModelSerializer):
+class TodoItemSerializer(serializers.ModelSerializer):
  
     class Meta:
-        model = Tutorial
+        model = TodoItem
         fields = ('id',
                   'title',
                   'description',
-                  'published')
+                  'created_at',
+                  'updated_at')
