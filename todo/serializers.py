@@ -7,7 +7,7 @@ class TodoItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = TodoItem
         fields = ('id',
-                  'title',
                   'description',
+                  'checked',
                   'created_at',
                   'updated_at')
