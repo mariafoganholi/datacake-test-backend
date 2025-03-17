@@ -21,4 +21,5 @@ from django.contrib import admin
 
 urlpatterns = [
     path('todo/', include('todo.urls')),
+    path('admin/', admin.site.urls),
 ]

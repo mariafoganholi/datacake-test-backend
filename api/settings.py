@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'todo.apps.TodoConfig',
     'corsheaders',
+    'auditlog',
 ]
 
 MIDDLEWARE = [
